@@ -99,7 +99,6 @@
 		456E44C91543E44C002A05E3 = {
 			isa = PBXGroup;
 			children = (
-				456E45211543E4E8002A05E3 /* libsqlite3.dylib */,
 				456E44DE1543E44C002A05E3 /* FmdbTest */,
 				456E44FC1543E44C002A05E3 /* FmdbTestTests */,
 				456E44D71543E44C002A05E3 /* Frameworks */,
@@ -119,6 +118,7 @@
 		456E44D71543E44C002A05E3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				456E45211543E4E8002A05E3 /* libsqlite3.dylib */,
 				456E44D81543E44C002A05E3 /* UIKit.framework */,
 				456E44DA1543E44C002A05E3 /* Foundation.framework */,
 				456E44DC1543E44C002A05E3 /* CoreGraphics.framework */,
