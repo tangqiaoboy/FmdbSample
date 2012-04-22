@@ -3,12 +3,78 @@
 //  FmdbTest
 //
 //  Created by Tang Qiao on 12-4-22.
-//  Copyright (c) 2012年 Netease. All rights reserved.
+//  Copyright (c) 2012年 blog.devtang.com All rights reserved.
 //
 
 #import "ViewController.h"
+#import "FMDatabase.h"
+
+@interface ViewController()
+
+@property (nonatomic, retain) NSString * dbPath;
+
+@end
 
 @implementation ViewController
+
+@synthesize dbPath;
+
+#pragma mark - SQL Operations
+
+- (IBAction)createTable:(id)sender {
+    debugMethod();
+    NSFileManager * fileManager = [NSFileManager defaultManager];
+    if ([fileManager fileExistsAtPath:self.dbPath] == NO) {
+        // create it
+        FMDatabase * db = [FMDatabase databaseWithPath:self.dbPath];
+        if ([db open]) {
+            NSString * sql = @"CREATE TABLE 'User' ('id' INTEGER PRIMARY KEY AUTOINCREMENT  NOT NULL , 'name' VARCHAR(30), 'password' VARCHAR(30))";
+            BOOL res = [db executeUpdate:sql];
+            if (!res) {
+                debugLog(@"error when creating db table");
+            } else {
+                debugLog(@"succ to creating db table");
+            }
+            [db close];
+        } else {
+            debugLog(@"error when open db");
+        }
+    }
+}
+
+
+- (IBAction)insertData:(id)sender {
+    static int idx = 1;
+    FMDatabase * db = [FMDatabase databaseWithPath:self.dbPath];
+    if ([db open]) {
+        NSString * sql = @"insert into user (name, password) values(?, ?) ";
+        NSString * name = [NSString stringWithFormat:@"tangqiao%d", idx++];
+        BOOL res = [db executeUpdate:sql, name, @"boy"];
+        if (!res) {
+            debugLog(@"error to insert data");
+        } else {
+            debugLog(@"succ to insert data");
+        }
+        [db close];
+    }
+}
+
+
+- (IBAction)queryData:(id)sender {
+    FMDatabase * db = [FMDatabase databaseWithPath:self.dbPath];
+    if ([db open]) {
+        NSString * sql = @"select * from user";
+        FMResultSet * rs = [db executeQuery:sql];
+        while ([rs next]) {
+            int userId = [rs intForColumn:@"id"];
+            NSString * name = [rs stringForColumn:@"name"];
+            NSString * pass = [rs stringForColumn:@"password"];
+            debugLog(@"user id = %d, name = %@, pass = %@", userId, name, pass);
+        }
+        [db close];
+    }
+
+}
 
 - (void)didReceiveMemoryWarning
 {
@@ -22,6 +88,9 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+    NSString * doc = PATH_OF_DOCUMENT;
+    NSString * path = [doc stringByAppendingPathComponent:@"user.sqlite"];
+    self.dbPath = path;
 }
 
 - (void)viewDidUnload

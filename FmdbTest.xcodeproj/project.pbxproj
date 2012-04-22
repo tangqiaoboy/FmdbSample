@@ -69,6 +69,7 @@
 		456E45181543E481002A05E3 /* FMResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMResultSet.h; sourceTree = "<group>"; };
 		456E45191543E481002A05E3 /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMResultSet.m; sourceTree = "<group>"; };
 		456E45211543E4E8002A05E3 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		456E45231543F99A002A05E3 /* MacroUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MacroUtils.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,6 +145,7 @@
 		456E44DF1543E44C002A05E3 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				456E45231543F99A002A05E3 /* MacroUtils.h */,
 				456E44E01543E44C002A05E3 /* FmdbTest-Info.plist */,
 				456E44E11543E44C002A05E3 /* InfoPlist.strings */,
 				456E44E41543E44C002A05E3 /* main.m */,
@@ -235,7 +237,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0420;
-				ORGANIZATIONNAME = Netease;
+				ORGANIZATIONNAME = blog.devtang.com;
 			};
 			buildConfigurationList = 456E44CE1543E44C002A05E3 /* Build configuration list for PBXProject "FmdbTest" */;
 			compatibilityVersion = "Xcode 3.2";
