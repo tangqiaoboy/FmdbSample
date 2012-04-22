@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import "FMDatabase.h"
+#import "FMDatabaseQueue.h"
 
 @interface ViewController()
 
@@ -61,6 +62,7 @@
 
 
 - (IBAction)queryData:(id)sender {
+    debugMethod();
     FMDatabase * db = [FMDatabase databaseWithPath:self.dbPath];
     if ([db open]) {
         NSString * sql = @"select * from user";
@@ -73,7 +75,56 @@
         }
         [db close];
     }
+}
 
+- (IBAction)clearAll:(id)sender {
+    FMDatabase * db = [FMDatabase databaseWithPath:self.dbPath];
+    if ([db open]) {
+        NSString * sql = @"delete from user";
+        BOOL res = [db executeUpdate:sql];
+        if (!res) {
+            debugLog(@"error to delete db data");
+        } else {
+            debugLog(@"succ to deleta db data");
+        }
+        [db close];
+    }
+}
+
+- (IBAction)multithread:(id)sender {
+    FMDatabaseQueue * queue = [FMDatabaseQueue databaseQueueWithPath:self.dbPath];
+    dispatch_queue_t q1 = dispatch_queue_create("queue1", NULL);
+    dispatch_queue_t q2 = dispatch_queue_create("queue2", NULL);
+    
+    dispatch_async(q1, ^{
+        for (int i = 0; i < 100; ++i) {
+            [queue inDatabase:^(FMDatabase *db) {
+                NSString * sql = @"insert into user (name, password) values(?, ?) ";
+                NSString * name = [NSString stringWithFormat:@"queue111 %d", i];
+                BOOL res = [db executeUpdate:sql, name, @"boy"];
+                if (!res) {
+                    debugLog(@"error to add db data: %@", name);
+                } else {
+                    debugLog(@"succ to add db data: %@", name);
+                }
+            }];
+        }
+    });
+    
+    dispatch_async(q2, ^{
+        for (int i = 0; i < 100; ++i) {
+            [queue inDatabase:^(FMDatabase *db) {
+                NSString * sql = @"insert into user (name, password) values(?, ?) ";
+                NSString * name = [NSString stringWithFormat:@"queue222 %d", i];
+                BOOL res = [db executeUpdate:sql, name, @"boy"];
+                if (!res) {
+                    debugLog(@"error to add db data: %@", name);
+                } else {
+                    debugLog(@"succ to add db data: %@", name);
+                }
+            }];
+        }
+    });
 }
 
 - (void)didReceiveMemoryWarning
